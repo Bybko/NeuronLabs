@@ -15,21 +15,17 @@ class Neuron:
 
 
 class NeuralNetwork:
-    def __init__(self, a, min_e, neurons_num: int):
+    def __init__(self, a):
         self.a = a
-        self.minError = min_e
-        self.neurons_nums = neurons_num
+        self.neurons_num = 0
         self.t = random()
         self.y = 0
         self.S = 0
-
         self.neurons = []
-        for _ in range(neurons_num):
-            network.add_neuron(Neuron())
 
     def add_neuron(self, neuron) -> None:
         self.neurons.append(neuron)
-        self.neurons_nums += 1
+        self.neurons_num += 1
 
     def activate(self) -> float:
         k = 1
@@ -52,15 +48,17 @@ class NeuralNetwork:
         for neuron, x in zip(self.neurons, input_image):
             neuron.take_input(x)
 
-    def train(self, inputs: list[float]) -> None:
+    def train(self, inputs: list[float], min_error: float) -> None:
         epochs = 0
         optimal = False
         while not optimal:
             error = 0
             print(f'\nЭпоха {epochs + 1}:')
-            for i in range(len(inputs) - self.neurons_nums):
-                input_image = inputs[i:i+self.neurons_nums] #от i включительно до i+self.neurons_num не включительно
-                reference = inputs[i+self.neurons_nums]
+            for i in range(len(inputs) - self.neurons_num):
+
+                # от i включительно до i+self.neurons_num не включительно
+                input_image = inputs[i:i+self.neurons_num]
+                reference = inputs[i+self.neurons_num]
 
                 self.calculate_output(input_image)
 
@@ -72,7 +70,7 @@ class NeuralNetwork:
                     neuron.weight = neuron.weight - self.a * neuron.x * (self.y - reference)
                 self.t = self.t + self.a * (self.y - reference)
             epochs += 1
-            if error < self.minError:
+            if error < min_error:
                 optimal = True
 
     def predict(self, inputs: list[float], duration: int) -> list[float]:
@@ -99,12 +97,18 @@ def make_inputs(step: float) -> list[float]:
 
 # main
 neurons_num = 3
-network = NeuralNetwork(0.001, 0.0000001, neurons_num)
+min_error = 0.0000001
+a = 0.001
 
+network = NeuralNetwork(a)
+for _ in range(neurons_num):
+    network.add_neuron(Neuron())
+
+# :30 означает взять с 0 по 29 из списка, возвращаемого make_inputs(), 30: означает с 30 и до конца
 inputs = make_inputs(0.1)[:30]
 predict_references = make_inputs(0.1)[30:]
 
-network.train(inputs)
+network.train(inputs, min_error)
 results = network.predict(inputs, 15)
 
 for i in range(len(results)):
