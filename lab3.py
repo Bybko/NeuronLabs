@@ -15,9 +15,7 @@ class Neuron:
 
 
 class NeuralNetwork:
-    def __init__(self, a):
-        self.a = a
-        self.neurons_num = 0
+    def __init__(self):
         self.t = random()
         self.y = 0
         self.S = 0
@@ -25,7 +23,6 @@ class NeuralNetwork:
 
     def add_neuron(self, neuron) -> None:
         self.neurons.append(neuron)
-        self.neurons_num += 1
 
     def activate(self) -> float:
         k = 1
@@ -41,12 +38,18 @@ class NeuralNetwork:
         self.y = self.activate()
         return self.y
 
-    def calculate_error(self, reference: float) -> float:
-        return 0.5 * ((self.y - reference) ** 2)
-
     def fill_input(self, input_image: list[float]) -> None:
         for neuron, x in zip(self.neurons, input_image):
             neuron.take_input(x)
+
+    def calculate_error(self, reference: float) -> float:
+        return 0.5 * ((self.y - reference) ** 2)
+
+    def calculate_train_step(self) -> float:
+        inputs_sum = 0
+        for neuron in self.neurons:
+            inputs_sum += (neuron.x ** 2)
+        return 1 / (1 + inputs_sum)
 
     def train(self, inputs: list[float], min_error: float) -> None:
         epochs = 0
@@ -54,21 +57,22 @@ class NeuralNetwork:
         while not optimal:
             error = 0
             print(f'\nЭпоха {epochs + 1}:')
-            for i in range(len(inputs) - self.neurons_num):
+            for i in range(len(inputs) - len(self.neurons)):
 
-                # от i включительно до i+self.neurons_num не включительно
-                input_image = inputs[i:i+self.neurons_num]
-                reference = inputs[i+self.neurons_num]
+                # от i включительно до i+len(self.neurons) не включительно
+                input_image = inputs[i:i+len(self.neurons)]
+                reference = inputs[i+len(self.neurons)]
 
                 self.calculate_output(input_image)
 
                 print(f'Значение: {self.y}\nЭталонное значение: {reference}')
 
                 error += self.calculate_error(reference)
+                a = self.calculate_train_step()
 
                 for neuron in self.neurons:
-                    neuron.weight = neuron.weight - self.a * neuron.x * (self.y - reference)
-                self.t = self.t + self.a * (self.y - reference)
+                    neuron.weight = neuron.weight - a * neuron.x * (self.y - reference)
+                self.t = self.t + a * (self.y - reference)
             epochs += 1
             if error < min_error:
                 optimal = True
@@ -98,9 +102,8 @@ def make_inputs(step: float) -> list[float]:
 # main
 neurons_num = 3
 min_error = 0.0000001
-a = 0.001
 
-network = NeuralNetwork(a)
+network = NeuralNetwork()
 for _ in range(neurons_num):
     network.add_neuron(Neuron())
 
