@@ -1,5 +1,5 @@
-# Лабораторная работа №2
-# Вариант 4: y = 4 * sin(8 * x) + 0.4
+# Лабораторная работа №3
+# Вариант 4
 
 from random import random
 from math import sin
@@ -65,7 +65,8 @@ class NeuralNetwork:
 
                 self.calculate_output(input_image)
 
-                print(f'Значение: {self.y}\nЭталонное значение: {reference}')
+                print(f'Значение: {self.y}\nЭталонное значение: {reference}\n'
+                      f'Среднеквадратичное отклонение: {self.calculate_error(reference)}')
 
                 error += self.calculate_error(reference)
                 a = self.calculate_train_step()
@@ -115,4 +116,5 @@ network.train(inputs, min_error)
 results = network.predict(inputs, 15)
 
 for i in range(len(results)):
-    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {inputs[i+3]}')
+    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {inputs[i+3]}'
+          f'\nСреднеквадратичное отклонение: {0.5 * ((results[i] - inputs[i + 3]) ** 2)}')

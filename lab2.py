@@ -62,7 +62,8 @@ class NeuralNetwork:
 
                 self.calculate_output(input_image)
 
-                print(f'Значение: {self.y}\nЭталонное значение: {reference}')
+                print(f'Значение: {self.y}\nЭталонное значение: {reference}\n'
+                      f'Среднеквадратичное отклонение: {self.calculate_error(reference)}')
 
                 error += self.calculate_error(reference)
 
@@ -97,7 +98,7 @@ def make_inputs(step: float) -> list[float]:
 
 # main
 neurons_num = 3
-min_error = 0.0000001
+min_error = 0.00000001
 a = 0.001
 
 network = NeuralNetwork(a)
@@ -112,4 +113,5 @@ network.train(inputs, min_error)
 results = network.predict(inputs, 15)
 
 for i in range(len(results)):
-    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {inputs[i+3]}')
+    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {inputs[i+3]}'
+          f'\nСреднеквадратичное отклонение: {0.5 * ((results[i] - inputs[i+3]) ** 2)}')
