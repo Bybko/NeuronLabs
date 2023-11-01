@@ -2,7 +2,7 @@
 # Вариант 4: y = 0.4 * cos(0.4 * x) + 0.08 * sin(0.4 * x)
 
 from math import sin
-from neuroarchitecture import Neuron, NeuralNetwork
+from neurones_architecture import Neuron, NeuralNetwork
 
 
 # function for calculate values from sinus-function

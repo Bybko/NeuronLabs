@@ -6,14 +6,14 @@ class Neuron:
         self.weights = [random() for _ in range(outputs_num)]
         self.x = 0
 
-    def take_input(self, x: float):
+    def take_input(self, x: float) -> None:
         self.x = x
 
     # activate-here
 
 
 class NeuronLayer:
-    def __init__(self, input_neuron_num: int, output_neuron_num=None):
+    def __init__(self, input_neuron_num: int, output_neuron_num: int = None):
         self.t = random()
 
         if output_neuron_num is None:
@@ -40,7 +40,8 @@ class NeuralNetwork:
     def __init__(self, layers_config: list[int]):
         self.layers = [NeuronLayer(layers_config[i]) for i in range(len(layers_config))]
 
-    def make_result(self, input_image: list[float]):
+    def make_result(self, input_image: list[float]) -> list[float]:
         self.layers[0].fill_inputs(input_image)
         for i in range(len(self.layers) - 1):
             self.layers[i + 1].fill_inputs(self.layers[i].make_outputs())
+        return self.layers[-1].make_outputs()
