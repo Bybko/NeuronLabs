@@ -74,9 +74,9 @@ class NeuralNetwork:
             if error < min_error:
                 optimal = True
 
-    def predict(self, inputs: list[float], duration: int) -> list[float]:
+    def predict(self, inputs: list[float], duration: int, inputs_num: int) -> list[float]:
         results = []
-        window = [inputs[0], inputs[1], inputs[2]]
+        window = [inputs[i] for i in range(inputs_num)]
         for _ in range(duration):
             buffer_element = self.calculate_output(window)
             for i in range(len(window) - 1):
@@ -110,8 +110,8 @@ inputs = make_inputs(0.1)[:30]
 predict_references = make_inputs(0.1)[30:]
 
 network.train(inputs, min_error)
-results = network.predict(inputs, 15)
+results = network.predict(inputs, 15, neurons_num)
 
 for i in range(len(results)):
-    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {inputs[i+3]}'
-          f'\nСреднеквадратичное отклонение: {0.5 * ((results[i] - inputs[i+3]) ** 2)}')
+    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {inputs[i+neurons_num]}'
+          f'\nСреднеквадратичное отклонение: {0.5 * ((results[i] - inputs[i+neurons_num]) ** 2)}')
