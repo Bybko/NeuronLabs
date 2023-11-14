@@ -2,7 +2,8 @@
 # Вариант 4: y = 0.4 * cos(0.4 * x) + 0.08 * sin(0.4 * x)
 
 from math import sin
-from neurones_architecture import Neuron, NeuralNetwork
+from neurones_architecture import NeuralNetwork
+from activate_functions import LinearFunction, SigmoidFunction, ActivateFunction
 
 
 # function for calculate values from sinus-function
@@ -16,20 +17,11 @@ def make_inputs(step: float) -> list[float]:
 
 
 # main
-neurons_num = 3
 min_error = 0.0000001
+layers_config = [(LinearFunction(), 6), (SigmoidFunction(), 2), (LinearFunction(), 1)]
+network = NeuralNetwork(layers_config)
 
-network = NeuralNetwork()
-for _ in range(neurons_num):
-    network.add_neuron(Neuron())
+# test
+print(network.make_result([0.1, 0.2, 0.3, 0.4, 0.5, 0.6]))
 
-# :30 означает взять с 0 по 29 из списка, возвращаемого make_inputs(), 30: означает с 30 и до конца
-inputs = make_inputs(0.1)[:30]
-predict_references = make_inputs(0.1)[30:]
 
-network.train(inputs, min_error)
-results = network.predict(inputs, 15)
-
-for i in range(len(results)):
-    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {inputs[i+3]}'
-          f'\nСреднеквадратичное отклонение: {0.5 * ((results[i] - inputs[i + 3]) ** 2)}')
