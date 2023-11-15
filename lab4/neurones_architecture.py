@@ -62,6 +62,12 @@ class NeuronLayer:
             self.outputs[j] -= self.t.weights[j]
         return self.outputs
 
+    def get_neurons_outputs(self) -> list[float]:
+        neuron_outputs = []
+        for neuron in self.neurons:
+            neuron_outputs.append(neuron.neuron_output())
+        return neuron_outputs
+
     def calculate_errors_on_layer(self, past_errors: list[float], past_outputs: list[float]) -> None:
         for neuron in self.neurons:
             neuron.calculate_error(past_errors, past_outputs)
@@ -75,8 +81,8 @@ class NeuronLayer:
 
 
 class NeuralNetwork:
-    def __init__(self, layers_config: list[tuple[ActivateFunction, int]], step: float):
-        self.a = step
+    def __init__(self, layers_config: list[tuple[ActivateFunction, int]]):
+        self.a = 0
         self.layers = []
 
         for config in layers_config:
@@ -101,6 +107,12 @@ class NeuralNetwork:
             error += 0.5 * ((outputs[i] - references[i]) ** 2)
         return error
 
+    def calculate_train_step(self) -> float:
+        inputs_sum = 0
+        for neuron in self.layers[0].neurons:
+            inputs_sum += (neuron.x ** 2)
+        return 1 / (1 + inputs_sum)
+
     def back_propagation(self, inputs: list[float], min_error: float) -> None:
         epochs = 0
         optimal = False
@@ -118,14 +130,15 @@ class NeuralNetwork:
 
                 # проходим по всем слоям в обратном направлении, за исключением выходного и входного.
                 start_index = len(self.layers) - 2
-                for i in range(start_index, 0, -1):
+                for i in range(start_index, -1, -1):
                     past_errors = self.layers[i+1].collect_layer_errors()
-                    past_outputs = self.layers[i+1].make_outputs()
+                    past_outputs = self.layers[i+1].get_neurons_outputs()
 
                     for neuron in self.layers[i].neurons:
                         neuron.calculate_error(past_errors, past_outputs)
                     self.layers[i].t.calculate_error(past_errors, past_outputs)
 
+                    self.a = self.calculate_train_step()
                     self.delta_rule(i, past_outputs)
             epochs += 1
             print(square_error)
@@ -141,3 +154,12 @@ class NeuralNetwork:
             for neuron in self.layers[layer_index].neurons:
                 neuron.weights[i] = neuron.weights[i] - self.a * neuron.error * \
                                     neuron.function.derivative(past_outputs[i]) * neuron.neuron_output()
+
+    def predict(self, inputs: list[float], duration: int) -> list[float]:
+        results = []
+        window = inputs[:6]
+        for i in range(1, duration):
+            buffer_element = self.make_result(window)
+            window = inputs[i:i+6]
+            results.append(buffer_element[0])
+        return results

@@ -20,7 +20,7 @@ class LinearFunction(ActivateFunction):
         return self.k * weighted_sum
 
     def derivative(self, y: float):
-        pass
+        return 1
 
 
 class SigmoidFunction(ActivateFunction):
