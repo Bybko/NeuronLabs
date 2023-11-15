@@ -1,27 +1,30 @@
 # Лабораторная работа №4
 # Вариант 4: y = 0.4 * cos(0.4 * x) + 0.08 * sin(0.4 * x)
 
-from math import sin
+from math import sin, cos
 from neurones_architecture import NeuralNetwork
-from activate_functions import LinearFunction, SigmoidFunction, ActivateFunction
+from activate_functions import LinearFunction, SigmoidFunction
 
 
-# function for calculate values from sinus-function
-def make_inputs(step: float) -> list[float]:
-    sinuses = []
+def make_sample(step: float) -> list[float]:
+    values = []
     x = 0
     for _ in range(45):
-        #sinuses.append(0.4 * sin(0.4 * x) + 0.4)
+        values.append(0.4 * cos(0.4 * x) + 0.08 * sin(0.4 * x))
         x += step
-    return sinuses
+    return values
 
 
-# main
-min_error = 0.0000001
+min_error = 0.0001
+a = 0.0001
 layers_config = [(LinearFunction(), 6), (SigmoidFunction(), 2), (LinearFunction(), 1)]
-network = NeuralNetwork(layers_config)
+network = NeuralNetwork(layers_config, a)
 
-# test
+inputs = make_sample(0.1)[:30]
+predict_references = make_sample(0.1)[30:]
+
 print(network.make_result([0.1, 0.2, 0.3, 0.4, 0.5, 0.6]))
+
+network.back_propagation(inputs, min_error)
 
 

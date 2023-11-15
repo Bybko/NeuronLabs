@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7bcae7bd-1d07-4f59-943c-882754ab81f5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lab4/activate_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab4/activate_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lab4/lab4.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab4/lab4.py" afterDir="false" />
@@ -64,5 +63,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
