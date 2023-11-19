@@ -11,7 +11,6 @@
       <change beforePath="$PROJECT_DIR$/lab4/activate_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab4/activate_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lab4/lab4.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab4/lab4.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lab4/neurones_architecture.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab4/neurones_architecture.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +41,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/NeuronLabs/lab4/lab4.py"
+    "last_opened_file_path": "D:/NeuronLabs"
   }
 }]]></component>
   <component name="RunManager">
@@ -53,9 +52,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\delta\Scripts\python.exe" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/lab4" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lab4/lab4.py" />

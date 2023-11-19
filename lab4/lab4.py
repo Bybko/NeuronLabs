@@ -10,22 +10,22 @@ from activate_functions import LinearFunction, SigmoidFunction
 def make_sample(step: float) -> list[float]:
     values = []
     x = 0
-    for _ in range(150):
+    for _ in range(45):
         values.append(0.4 * cos(0.4 * x) + 0.08 * sin(0.4 * x))
         x += step
     return values
 
 
-min_error = 0.001
-layers_config = [(LinearFunction(), 6), (LinearFunction(), 2), (LinearFunction(), 1)]
+min_error = 0.0001
+layers_config = [(LinearFunction(), 6), (SigmoidFunction(), 2), (LinearFunction(), 1)]
 network = NeuralNetwork(layers_config)
 
-inputs = make_sample(0.1)[:100]
-predict_references = make_sample(0.1)[100:]
+inputs = make_sample(0.1)[:30]
+predict_references = make_sample(0.1)[30:]
 
 network.back_propagation(inputs, min_error)
-results = network.predict(inputs+predict_references, 150)
-pyplot.plot(inputs + predict_references)
+results = network.predict(inputs+predict_references)
+pyplot.plot((inputs + predict_references)[6:])
 pyplot.plot(results)
 pyplot.show()
 for i in range(len(results)):

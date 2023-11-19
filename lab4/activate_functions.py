@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import numpy as np
+from math import exp
 
 
 class ActivateFunction(ABC):
@@ -25,7 +25,7 @@ class LinearFunction(ActivateFunction):
 
 class SigmoidFunction(ActivateFunction):
     def activate(self, weighted_sum: float) -> float:
-        return 1 / (1 + np.exp(weighted_sum * (-1)))
+        return 1 / (1 + exp(weighted_sum * (-1)))
 
     def derivative(self, y: float):
         return y * (1 - y)

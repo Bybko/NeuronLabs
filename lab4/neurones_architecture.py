@@ -19,10 +19,10 @@ class Neuron:
     def neuron_output(self) -> float:
         return self.function.activate(self.x)
 
-    def calculate_error(self, past_errors: list[float], past_outputs: list[float]) -> None:
+    def calculate_error(self, past_errors: list[float], past_outputs: list[float], function: ActivateFunction) -> None:
         self.error = 0
         for i in range(len(self.weights)):
-            self.error += past_errors[i] * self.function.derivative(past_outputs[i]) * self.weights[i]
+            self.error += past_errors[i] * function.derivative(past_outputs[i]) * self.weights[i]
 
 
 class Bias(Neuron):
@@ -58,7 +58,7 @@ class NeuronLayer:
         self.outputs = [0 for _ in range(len(self.outputs))]
         for j in range(len(self.outputs)):
             for i in range(len(self.neurons)):
-                self.outputs[j] += self.neurons[i].weights[j] * self.neurons[i].x
+                self.outputs[j] += self.neurons[i].weights[j] * self.neurons[i].neuron_output()
             self.outputs[j] -= self.t.weights[j]
         return self.outputs
 
@@ -68,10 +68,11 @@ class NeuronLayer:
             neuron_outputs.append(neuron.neuron_output())
         return neuron_outputs
 
-    def calculate_errors_on_layer(self, past_errors: list[float], past_outputs: list[float]) -> None:
+    def calculate_errors_on_layer(self, past_errors: list[float], past_outputs: list[float],
+                                  layer_function: ActivateFunction) -> None:
         for neuron in self.neurons:
-            neuron.calculate_error(past_errors, past_outputs)
-        self.t.calculate_error(past_errors, past_outputs)
+            neuron.calculate_error(past_errors, past_outputs, layer_function)
+        self.t.calculate_error(past_errors, past_outputs, layer_function)
 
     def collect_layer_errors(self) -> list[float]:
         errors_on_the_layer = []
@@ -116,6 +117,7 @@ class NeuralNetwork:
     def back_propagation(self, inputs: list[float], min_error: float) -> None:
         epochs = 0
         optimal = False
+        prev_error = 0
         while not optimal:
             square_error = 0
             print(f'\nЭпоха {epochs + 1}:')
@@ -125,40 +127,43 @@ class NeuralNetwork:
 
                 outputs = self.make_result(input_image)
                 square_error += self.calculate_square_error(outputs, reference)
-                for i in range(len(outputs)):
-                    self.layers[-1].neurons[i].error = outputs[i] - reference[i]
+                for j in range(len(outputs)):
+                    self.layers[-1].neurons[j].error = outputs[j] - reference[j]
 
-                # проходим по всем слоям в обратном направлении, за исключением выходного и входного.
+                # проходим по всем слоям в обратном направлении, за исключением выходного
                 start_index = len(self.layers) - 2
-                for i in range(start_index, -1, -1):
-                    past_errors = self.layers[i+1].collect_layer_errors()
-                    past_outputs = self.layers[i+1].get_neurons_outputs()
+                for j in range(start_index, -1, -1):
+                    past_errors = self.layers[j+1].collect_layer_errors()
+                    past_outputs = self.layers[j+1].get_neurons_outputs()
 
-                    for neuron in self.layers[i].neurons:
-                        neuron.calculate_error(past_errors, past_outputs)
-                    self.layers[i].t.calculate_error(past_errors, past_outputs)
+                    self.layers[j].calculate_errors_on_layer(past_errors, past_outputs,
+                                                             self.layers[j+1].neurons[0].function)
 
                     self.a = self.calculate_train_step()
-                    self.delta_rule(i, past_outputs)
+                    self.delta_rule(j, past_outputs)
             epochs += 1
             print(square_error)
+            if prev_error == square_error:
+                pass
+            prev_error = square_error
             if square_error < min_error:
                 optimal = True
 
     def delta_rule(self, layer_index: int, past_outputs: list[float]):
         for i in range(len(self.layers[layer_index].t.weights)):
             self.layers[layer_index].t.weights[i] = self.layers[layer_index].t.weights[i] + \
-                                                    self.a * self.layers[layer_index].t.error * \
-                                                    self.layers[layer_index].t.function.derivative(past_outputs[i])
+                                                    self.a * self.layers[layer_index + 1].neurons[i].error * \
+                                                    self.layers[layer_index + 1].t.function.derivative(past_outputs[i])
 
             for neuron in self.layers[layer_index].neurons:
-                neuron.weights[i] = neuron.weights[i] - self.a * neuron.error * \
-                                    neuron.function.derivative(past_outputs[i]) * neuron.neuron_output()
+                neuron.weights[i] = neuron.weights[i] - self.a * self.layers[layer_index + 1].neurons[i].error * \
+                                    self.layers[layer_index + 1].neurons[i].function.derivative(past_outputs[i]) * \
+                                    neuron.neuron_output()
 
-    def predict(self, inputs: list[float], duration: int) -> list[float]:
+    def predict(self, inputs: list[float]) -> list[float]:
         results = []
         window = inputs[:6]
-        for i in range(1, duration):
+        for i in range(1, len(inputs) - 6):
             buffer_element = self.make_result(window)
             window = inputs[i:i+6]
             results.append(buffer_element[0])
