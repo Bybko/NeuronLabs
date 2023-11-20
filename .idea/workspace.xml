@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7bcae7bd-1d07-4f59-943c-882754ab81f5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/lab5/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lab5/activate_functions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lab5/lab5.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lab5/neurones_architecture.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/NeuronLabs.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/NeuronLabs.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab4/activate_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab4/activate_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab4/lab4.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab4/lab4.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab4/neurones_architecture.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab4/neurones_architecture.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +21,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="Freeze Requirements File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -41,10 +42,10 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "D:/NeuronLabs"
+    "last_opened_file_path": "C:/NeuronLabs/lab5/lab5.py"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.lab5">
     <configuration name="lab4" type="PythonConfigurationType" factoryName="Python">
       <module name="NeuronLabs" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -52,9 +53,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\delta\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/lab4" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lab4/lab4.py" />
@@ -66,6 +67,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="lab5" type="PythonConfigurationType" factoryName="Python">
+      <module name="NeuronLabs" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\delta\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/lab5" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lab5/lab5.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.lab4" />
+      <item itemvalue="Python.lab5" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
