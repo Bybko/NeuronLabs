@@ -114,10 +114,10 @@ class NeuralNetwork:
             inputs_sum += (neuron.x ** 2)
         return 1 / (1 + inputs_sum)
 
-    def back_propagation(self, inputs: list[float], min_error: float) -> None:
+    def back_propagation(self, inputs: list[float], min_error: float) -> list[float]:
+        list_of_errors = []
         epochs = 0
         optimal = False
-        prev_error = 0
         while not optimal:
             square_error = 0
             print(f'\nЭпоха {epochs + 1}:')
@@ -141,13 +141,16 @@ class NeuralNetwork:
 
                     self.a = self.calculate_train_step()
                     self.delta_rule(j, past_outputs)
+
+                print(f'Значение: {outputs}\nЭталонное значение: {reference}\n'
+                      f'Среднеквадратичное отклонение: {square_error}')
             epochs += 1
-            print(square_error)
-            if prev_error == square_error:
-                pass
-            prev_error = square_error
+
+            list_of_errors.append(square_error)
             if square_error < min_error:
                 optimal = True
+
+        return list_of_errors
 
     def delta_rule(self, layer_index: int, past_outputs: list[float]):
         for i in range(len(self.layers[layer_index].t.weights)):

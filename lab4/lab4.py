@@ -23,11 +23,15 @@ network = NeuralNetwork(layers_config)
 inputs = make_sample(0.1)[:30]
 predict_references = make_sample(0.1)[30:]
 
-network.back_propagation(inputs, min_error)
+errors = network.back_propagation(inputs, min_error)
 results = network.predict(inputs+predict_references)
+
+pyplot.plot(errors)
+pyplot.show()
+for i in range(len(results)):
+    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {(inputs+predict_references)[i+6]}'
+          f'\nСреднеквадратичное отклонение: {0.5 * ((results[i] - (inputs+predict_references)[i+6]) ** 2)}')
 pyplot.plot((inputs + predict_references)[6:])
 pyplot.plot(results)
 pyplot.show()
-for i in range(len(results)):
-    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {inputs[i+6]}')
 
