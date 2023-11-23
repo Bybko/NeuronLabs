@@ -17,7 +17,11 @@ def make_sample(step: float) -> list[float]:
 
 
 min_error = 0.0001
-layers_config = [(LinearFunction(), 6), (SigmoidFunction(), 2), (LinearFunction(), 1)]
+neurons_input = 6
+neurons_hidden = 2
+neurons_output = 1
+layers_config = [(LinearFunction(), neurons_input), (SigmoidFunction(), neurons_hidden),
+                 (LinearFunction(), neurons_output)]
 network = NeuralNetwork(layers_config)
 
 inputs = make_sample(0.1)[:30]
@@ -29,9 +33,11 @@ results = network.predict(inputs+predict_references)
 pyplot.plot(errors)
 pyplot.show()
 for i in range(len(results)):
-    print(f'\nСпрогнозированное значение: {results[i]}\nЭталонное значение: {(inputs+predict_references)[i+6]}'
-          f'\nСреднеквадратичное отклонение: {0.5 * ((results[i] - (inputs+predict_references)[i+6]) ** 2)}')
-pyplot.plot((inputs + predict_references)[6:])
+    print(f'\nСпрогнозированное значение: {results[i]}'
+          f'\nЭталонное значение: {(inputs+predict_references)[i+neurons_input]}'
+          f'\nСреднеквадратичное отклонение: '
+          f'{0.5 * ((results[i] - (inputs+predict_references)[i+neurons_input]) ** 2)}')
+pyplot.plot((inputs + predict_references)[neurons_input:])
 pyplot.plot(results)
 pyplot.show()
 

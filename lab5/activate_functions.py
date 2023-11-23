@@ -29,3 +29,14 @@ class SigmoidFunction(ActivateFunction):
 
     def derivative(self, y: float):
         return y * (1 - y)
+
+
+class ThresholdFunction(ActivateFunction):
+    def activate(self, weighted_sum: float) -> int:
+        if weighted_sum >= 0:
+            return 1
+        else:
+            return 0
+
+    def derivative(self, y: float):
+        return 1

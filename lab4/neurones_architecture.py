@@ -165,9 +165,9 @@ class NeuralNetwork:
 
     def predict(self, inputs: list[float]) -> list[float]:
         results = []
-        window = inputs[:6]
-        for i in range(1, len(inputs) - 6):
+        window = inputs[:len(self.layers[0].neurons)]
+        for i in range(1, len(inputs) - len(self.layers[0].neurons)):
             buffer_element = self.make_result(window)
-            window = inputs[i:i+6]
+            window = inputs[i:i+len(self.layers[0].neurons)]
             results.append(buffer_element[0])
         return results
