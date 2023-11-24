@@ -54,12 +54,18 @@ class NeuronLayer:
         for neuron, x in zip(self.neurons, input_image):
             neuron.take_input(x)
 
-    def make_outputs(self) -> list[float]:
+    def make_weighted_sum(self) -> list[float]:
         self.outputs = [0 for _ in range(len(self.outputs))]
         for j in range(len(self.outputs)):
             for i in range(len(self.neurons)):
                 self.outputs[j] += self.neurons[i].weights[j] * self.neurons[i].neuron_output()
             self.outputs[j] -= self.t.weights[j]
+        return self.outputs
+
+    def make_outputs(self) -> list[float]:
+        self.outputs = []
+        for neuron in self.neurons:
+            self.outputs.append(neuron.neuron_output())
         return self.outputs
 
     def get_neurons_outputs(self) -> list[float]:
@@ -99,7 +105,7 @@ class NeuralNetwork:
     def make_result(self, input_image: list[float]) -> list[float]:
         self.layers[0].fill_inputs(input_image)
         for i in range(len(self.layers) - 1):
-            self.layers[i + 1].fill_inputs(self.layers[i].make_outputs())
+            self.layers[i + 1].fill_inputs(self.layers[i].make_weighted_sum())
         return self.layers[-1].make_outputs()
 
     def calculate_square_error(self, outputs: list[float], references: list[float]) -> float:
@@ -120,6 +126,7 @@ class NeuralNetwork:
         epochs = 0
         optimal = False
         while not optimal:
+            self.a = self.calculate_train_step()
             square_error = 0
             print(f'\nЭпоха {epochs + 1}:')
             for input_image, reference in zip(inputs, references):
@@ -136,8 +143,6 @@ class NeuralNetwork:
 
                     self.layers[i].calculate_errors_on_layer(past_errors, past_outputs,
                                                              self.layers[i+1].neurons[0].function)
-
-                    self.a = self.calculate_train_step()
                     self.delta_rule(i, past_outputs)
 
             print(square_error)
