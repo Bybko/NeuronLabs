@@ -40,3 +40,17 @@ class ThresholdFunction(ActivateFunction):
 
     def derivative(self, y: float):
         return 1
+
+
+class HardMaxFunction(ActivateFunction):
+    def __init__(self, neuron_index: int = 0):
+        self.neuron_index = neuron_index
+
+    def activate(self, weighted_sums: list[float]) -> float:
+        for weighted_sum in weighted_sums:
+            if weighted_sums[self.neuron_index] < weighted_sum:
+                return 0
+        return 1
+
+    def derivative(self, y: float):
+        return 1

@@ -62,12 +62,6 @@ class NeuronLayer:
             self.outputs[j] -= self.t.weights[j]
         return self.outputs
 
-    def make_outputs(self) -> list[float]:
-        self.outputs = []
-        for neuron in self.neurons:
-            self.outputs.append(neuron.neuron_output())
-        return self.outputs
-
     def get_neurons_outputs(self) -> list[float]:
         neuron_outputs = []
         for neuron in self.neurons:
@@ -106,7 +100,7 @@ class NeuralNetwork:
         self.layers[0].fill_inputs(input_image)
         for i in range(len(self.layers) - 1):
             self.layers[i + 1].fill_inputs(self.layers[i].make_weighted_sum())
-        return self.layers[-1].make_outputs()
+        return self.layers[-1].get_neurons_outputs()
 
     def calculate_square_error(self, outputs: list[float], references: list[float]) -> float:
         error = 0

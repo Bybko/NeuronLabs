@@ -1,5 +1,5 @@
 from random import random
-from activate_functions import ActivateFunction
+from activate_functions import ActivateFunction, HardMaxFunction
 
 
 class Neuron:
@@ -18,6 +18,9 @@ class Neuron:
 
     def neuron_output(self) -> float:
         return self.function.activate(self.x)
+
+    def neuron_output_hardmax(self, weighted_sums: list[float]) -> float:
+        return self.function.activate(weighted_sums)
 
     def calculate_error(self, past_errors: list[float], past_outputs: list[float], function: ActivateFunction) -> None:
         self.error = 0
@@ -41,7 +44,11 @@ class NeuronLayer:
         self.function = activate_function
         self.outputs = []
         self.t = Bias(self.function)
-        self.neurons = [Neuron(self.function) for _ in range(input_neuron_num)]
+
+        if isinstance(activate_function, HardMaxFunction):
+            self.neurons = [Neuron(HardMaxFunction(i)) for i in range(input_neuron_num)]
+        else:
+            self.neurons = [Neuron(self.function) for _ in range(input_neuron_num)]
 
     def count_outputs(self, output_neuron_num: int) -> None:
         for _ in range(output_neuron_num):
@@ -62,16 +69,16 @@ class NeuronLayer:
             self.outputs[j] -= self.t.weights[j]
         return self.outputs
 
-    def make_outputs(self) -> list[float]:
-        self.outputs = []
-        for neuron in self.neurons:
-            self.outputs.append(neuron.neuron_output())
-        return self.outputs
-
     def get_neurons_outputs(self) -> list[float]:
         neuron_outputs = []
         for neuron in self.neurons:
             neuron_outputs.append(neuron.neuron_output())
+        return neuron_outputs
+
+    def get_neurons_outputs_hardmax(self, weighted_sums: list[float]) -> list[float]:
+        neuron_outputs = []
+        for neuron in self.neurons:
+            neuron_outputs.append(neuron.neuron_output_hardmax(weighted_sums))
         return neuron_outputs
 
     def calculate_errors_on_layer(self, past_errors: list[float], past_outputs: list[float],
@@ -106,7 +113,12 @@ class NeuralNetwork:
         self.layers[0].fill_inputs(input_image)
         for i in range(len(self.layers) - 1):
             self.layers[i + 1].fill_inputs(self.layers[i].make_weighted_sum())
-        return self.layers[-1].make_outputs()
+
+        if isinstance(self.layers[-1].neurons[0].function, HardMaxFunction):
+            weighted_sums = self.layers[-2].outputs
+            return self.layers[-1].get_neurons_outputs_hardmax(weighted_sums)
+        else:
+            return self.layers[-1].get_neurons_outputs()
 
     def calculate_square_error(self, outputs: list[float], references: list[float]) -> float:
         error = 0
@@ -139,7 +151,11 @@ class NeuralNetwork:
                 start_index = len(self.layers) - 2
                 for i in range(start_index, -1, -1):
                     past_errors = self.layers[i+1].collect_layer_errors()
-                    past_outputs = self.layers[i+1].get_neurons_outputs()
+                    if isinstance(self.layers[i+1].neurons[0].function, HardMaxFunction):
+                        weighted_sums = self.layers[i].outputs
+                        past_outputs = self.layers[i+1].get_neurons_outputs_hardmax(weighted_sums)
+                    else:
+                        past_outputs = self.layers[i+1].get_neurons_outputs()
 
                     self.layers[i].calculate_errors_on_layer(past_errors, past_outputs,
                                                              self.layers[i+1].neurons[0].function)
