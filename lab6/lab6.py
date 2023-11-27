@@ -1,7 +1,6 @@
 # Лабораторная работа №6
 # Вариант 4: вектора 4, 3, 8
 
-from matplotlib import pyplot
 from hopfield_architect import HopfieldNeuronNetwork
 from activate_functions import ThresholdFunction
 
