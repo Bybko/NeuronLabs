@@ -16,6 +16,7 @@ network = NeuralNetwork(layers_config)
 inputs = [vector4, vector3, vector8]
 references = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 
-network.back_propagation(inputs, references, min_error)
+errors = network.back_propagation(inputs, references, min_error)
+pyplot.plot(errors)
+pyplot.show()
 print(network.make_result([1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0]))
-

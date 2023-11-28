@@ -14,4 +14,3 @@ network = HopfieldNeuronNetwork(ThresholdFunction(), len(inputs[0]))
 for input_image in inputs:
     network.train(input_image)
 print(network.make_result([1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0]))
-
